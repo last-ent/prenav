@@ -5,11 +5,7 @@ import scala.concurrent.ExecutionContext
 import cats.effect.ExitCode
 import fs2.Stream
 import fs2.concurrent.Queue
-import nav.Client
-import nav.Token
-import nav.SubscriptionId
-import nav.Channels
-import nav.Navika
+import nav.{Client, Token, SubscriptionId, Channels, Navika}
 import cats.implicits._
 import io.circe._
 import io.circe.parser._
