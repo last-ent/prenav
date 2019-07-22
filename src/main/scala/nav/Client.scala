@@ -2,8 +2,9 @@ package nav
 
 import cats.effect.Effect
 import fs2.Stream
+import java.nio.ByteBuffer
 
-trait Client {
-  def token[F[_]: Effect]: F[Token]
-  def streamSubscription[F[_]: Effect](id: SubscriptionId): F[Stream[F, String]]
+abstract class Client[F[_]: Effect] {
+  def token: F[Token]
+  def streamSubscription(id: SubscriptionId): F[Stream[F, String]]
 }

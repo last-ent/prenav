@@ -16,7 +16,12 @@ lazy val root = (project in file("."))
       "org.typelevel" %% "cats-effect" % "1.3.1",
       "org.typelevel" %% "cats-core" % "2.0.0-M4",
       "org.http4s" %% "http4s-dsl" % "0.20.3",
-      "org.http4s" %% "http4s-blaze-server" % "0.20.3"
+      "org.http4s" %% "http4s-blaze-server" % "0.20.3",
+      "io.circe" % "circe-fs2_2.12" % "0.12.0-M1",
+      "io.chrisdavenport" % "circuit_2.12" % "0.2.3",
+      "io.circe" %% "circe-core" % "0.11.1",
+      "io.circe" %% "circe-generic" % "0.11.1",
+      "io.circe" %% "circe-parser" % "0.11.1"
     )
   )
 

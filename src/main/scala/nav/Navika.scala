@@ -5,31 +5,35 @@ import cats.effect.Effect
 import cats.effect.ContextShift
 import fs2.concurrent.Queue
 import cats.implicits._
+import io.circe.Json
+import java.nio.ByteBuffer
+import io.circe.fs2._
+import io.circe._
+import io.circe.parser._
 
-sealed abstract class Navika[F[_]: Effect, A] {
+sealed abstract class Navika[F[_]: Effect] {
   def readChunks: Stream[F, Unit]
 }
 
-class Navika1[F[_]: Effect, A](
-    client: Client,
-    channels: Channels[F, String],
+class Navika1[F[_]: Effect](
+    client: Client[F],
+    channels: Channels[F],
     cs: ContextShift[F]
-) extends Navika[F, A] {
+) extends Navika[F] {
   implicit val ctxShft: ContextShift[F] = cs
 
-  def readChunks: Stream[F, Unit] =
+  override def readChunks: Stream[F, Unit] =
     for {
       chunks <- Stream.eval(client.streamSubscription(channels.input))
-      chunk <- chunks
+      chunk <- chunks.through(stringStreamParser)
       _ <- Stream.eval(channels.output.enqueue1(chunk))
     } yield ()
-
 }
 
 object Navika {
   def apply[F[_]: Effect](
-      client: Client,
-      channels: Channels[F, String],
+      client: Client[F],
+      channels: Channels[F],
       ctxShft: ContextShift[F]
-  ) = new Navika1[F, String](client, channels, ctxShft)
+  ) = new Navika1[F](client, channels, ctxShft)
 }
